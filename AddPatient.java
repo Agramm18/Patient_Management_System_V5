@@ -9,7 +9,10 @@ public class AddPatient {
     
     //Age Information
     private int age;
-    private int birthday;
+    
+    private LocalDate birthdate;
+    private LocalDate DateNow;
+
     private int birthday_day;
     private int birthday_month;
     private int birthday_year;
@@ -31,7 +34,7 @@ public class AddPatient {
     }
 
     //Hello MSG
-    public static void ShowAddHelloMSG() {
+    public static void HeaderMSG() {
         System.out.println("\n==================================================");
         System.out.println("====You can now Add your patient to the System====");
         System.out.println("==================================================\n");
@@ -40,74 +43,88 @@ public class AddPatient {
     //Set basic values for name
     public void AddBasicInformation(Scanner scanner) {
         while (true) {
-            try {
                 //Set Values
                 System.out.println("Please type in your first name: ");
-                this.fname = scanner.nextLine();
+                String fname = scanner.nextLine();
 
-                System.out.println("Please type in your last name: ");
-                this.lname = scanner.nextLine();
-                //Error Handeling
-                if (this.fname == null || this.fname.isBlank()) {
-                    throw new IllegalArgumentException("Your Firstname seems to be empty");
-                } else if (this.lname == null || this.lname.isBlank()) {
-                    throw new IllegalArgumentException("Your last name seems to be empty");
-                } else {
-                    break;
+                if (fname == null || fname.isBlank()) {
+                    throw new IllegalArgumentException("Your first name seems to be empty");
                 }
 
-            } catch (Exception error) {
-                System.out.println("\nThere is your error in your name");
-                System.out.println("The error is: " + error + "\n");
+                System.out.println("Please type in your last name: ");
+                String lname = scanner.nextLine();
+
+                 //Error Handeling
+                if (lname == null || lname.isBlank()) {
+                    throw new IllegalArgumentException("Your last name seems to be empty");
+                }
+
+                this.fname = fname;
+                this.lname = lname;
+                break;
             }
+    }
+
+    public void CollectDateValues(Scanner scanner) {
+        //Set the aptients age
+        while (true) {
+            //String values to check if input is empty or not
+            String birthdayDayString;
+            String birthdayMonthString;
+            String birthdayYearString;
+
+            //int values to validate date and set birhtday/ age
+            int birthDay;
+            int birthMonth;
+            int birthYear;
+
+            //Collect the values via user Input
+            System.out.println("Please type in the day from your birthday: ");
+            birthdayDayString = scanner.nextLine();
+
+            System.out.println("Please type in the month from your birthday: ");
+            birthdayMonthString = scanner.nextLine();
+
+            System.out.println("Please type in the year where you born: ");
+            birthdayYearString = scanner.nextLine();
+
+            //Check if user_input is empty
+            if (birthdayDayString.isBlank() || birthdayMonthString.isBlank() || birthdayYearString.isBlank()) {
+                throw new IllegalArgumentException("One of your inputs are blank please try again");
+            } else {
+                //If not parse the integer values
+                birthDay= Integer.parseInt(birthdayDayString);
+                birthMonth = Integer.parseInt(birthdayMonthString);
+                birthYear = Integer.parseInt(birthdayYearString);
+
+                //Check if User input values are valid
+                if (birthDay< 1 || birthMonth < 1 || birthYear < 1) {
+                    throw new IllegalArgumentException("The Day/Month/Year can't be less than 1");
+                } else if (birthYear < 1900) {
+                    throw new IllegalArgumentException("Are you realy this old? the year is invalid cause it's behind 1900");
+                } else if (birthYear > LocalDate.now().getYear()) {
+                    throw new IllegalArgumentException("Are you from the future? the year is invalid cause it's from the future");
+                } else if (birthMonth > 12) {
+                    throw new IllegalArgumentException("Your month is out of range only 1-12 are valid");
+                } else if (birthMonth == 2 && Year.isLeap(birthYear) || birthDay > 29) {
+                    throw new IllegalArgumentException("The Year: " + birthYear + "is a leap year and the month febraury can't have more than 29 days");
+                }
+            }
+                //Set the values if user input is valid
+                this.birthday_day = birthDay;
+                this.birthday_month = birthMonth;
+                this.birthday_year = birthYear;
+                break;
         }
     }
 
-
-    public void SetAge(Scanner scanner) {
-        //Set the aptients age
+    public void generateBirthDay(Scanner scanner) {
         while (true) {
-            try {
+            this.birthdate = LocalDate.of(this.birthday_year, this.birthday_month, this.birthday_day);
+            LocalDate DateNow = LocalDate.now();
 
-                String birthdayDayString;
-                String birthdayMonthString;
-                String birthdayYearString;
-
-                //Collect the values via user Input
-                System.out.println("Please type in the day from your birthday: ");
-                birthdayDayString = scanner.nextLine();
-
-                System.out.println("Please type in the month from your birthday: ");
-                birthdayMonthString = scanner.nextLine();
-
-                System.out.println("Please type in the year where you born: ");
-                birthdayYearString = scanner.nextLine();
-
-                //Check if user_input is empty
-                if (birthdayDayString.isBlank() || birthdayMonthString.isBlank() || birthdayYearString.isBlank()) {
-                    throw new IllegalArgumentException("One of your inputs are blank please try again");
-                } else {
-                    //If not parse the integer values
-                    this.birthday_day = Integer.parseInt(birthdayDayString);
-                    this.birthday_month = Integer.parseInt(birthdayMonthString);
-                    this.birthday_year = Integer.parseInt(birthdayYearString);
-
-                    //Check if User input values are valid
-                    if (this.birthday_day < 1 || this.birthday_month < 1 || this.birthday_year < 1) {
-                        throw new IllegalArgumentException("The Day/Month/Year can't be less than 1");
-                    } else if (this.birthday_year < 1900) {
-                        throw new IllegalArgumentException("Are you realy this old? the year is invalid cause it's behind 1900");
-                    } else if (this.birthday_year > LocalDate.now().getYear()) {
-                        throw new IllegalArgumentException("Are you from the future? the year is invalid cause it's from the future");
-                    } else if (this.birthday_month > 12) {
-                        throw new IllegalArgumentException("Your month is out of range only 1-12 are valid");
-                    }
-                }
-                break;
-            } catch (Exception error) {
-                System.out.println("\nThere is an error in your code");
-                System.out.println("The error is: " + error + "\n");
-            }
+            this.age = Period.between(birthdate, DateNow).getYears();
+            break;
         }
     }
 
@@ -115,11 +132,13 @@ public class AddPatient {
     public void DisplayPatient() {
         System.out.println("\n------------------The Patient------------\n");
         System.out.println("First Name: " + this.fname);
-        System.out.println("Last Name: " + this.lname);
+        System.out.println("Last Name: " + this.lname + "\n");
 
         System.out.println("Birthday day: " + this.birthday_day);
         System.out.println("Birthday month: " + this.birthday_month);
         System.out.println("Birthday year: " + this.birthday_year);
+        System.out.println("\nBirthday date: " + birthdate);
+        System.out.println("Age: " + this.age);
     }
 
     //Add to Data Base
