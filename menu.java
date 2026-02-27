@@ -36,6 +36,7 @@ public class menu {
                         case 1:
                             AddPatient.ShowAddHelloMSG();
                             add.AddBasicInformation(scanner);
+                            add.SetAge(scanner);
                             add.DisplayPatient();
                             break;
                         
