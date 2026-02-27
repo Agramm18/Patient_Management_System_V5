@@ -6,19 +6,20 @@ public class AddPatient {
     //Name Information
     private String fname;
     private String lname;
+
+    private String gender;
     
     //Age Information
     private int age;
     
     private LocalDate birthdate;
-    private LocalDate DateNow;
 
     private int birthday_day;
     private int birthday_month;
     private int birthday_year;
 
     //Body details
-    private double heihgt_cm;
+    private double heihgt_m;
     private double weight_kg;
 
     //Address Information
@@ -59,8 +60,22 @@ public class AddPatient {
                     throw new IllegalArgumentException("Your last name seems to be empty");
                 }
 
+                System.out.println("Please type in your gender (male/female): ");
+                String gender = scanner.nextLine();
+
+                if (gender == null || gender.isBlank()) {
+                    throw new IllegalArgumentException("It seems that your gender is none or empty");
+                } 
+                
+                gender = gender.trim().toLowerCase();
+                
+                if (!gender.equals("male") && !gender.equals("female")) {
+                    throw new IllegalArgumentException("Only your Biological gender (male/female) is allowed for medical reasons");
+                }
+
                 this.fname = fname;
                 this.lname = lname;
+                this.gender = gender;
                 break;
             }
     }
@@ -128,17 +143,51 @@ public class AddPatient {
         }
     }
 
+
+    public void SetBodyMesaurements(Scanner scanner) {
+        while (true) {
+            double height;
+            double weight;
+
+            System.out.println("Please type in your height in m (1,20 e.g): ");
+            height = scanner.nextDouble();
+
+            if (height < 0.24) {
+                throw new IllegalArgumentException("You reached the limit the limit is 0.24m or 24cm");
+            } else if (height > 300) {
+                throw new IllegalArgumentException("You reached the limit are you a giant or what the limit is 3m");
+            }
+
+            System.out.println("Please type in your weight in kg");
+            weight = scanner.nextDouble();
+
+            if (weight < 0.45) {
+                throw new IllegalArgumentException("You reached the limit the limit is 0.45 kg or 450g");
+            } else if (weight > 650) {
+                throw new IllegalArgumentException("You reached the limit the limit is 650 kg");
+            }
+
+            this.heihgt_m = height;
+            this.weight_kg = weight;
+            break;
+        }
+    }
+
     //Display Data
     public void DisplayPatient() {
         System.out.println("\n------------------The Patient------------\n");
         System.out.println("First Name: " + this.fname);
-        System.out.println("Last Name: " + this.lname + "\n");
+        System.out.println("Last Name: " + this.lname);
+        System.out.println("Gender: " + this.gender + "\n");
 
         System.out.println("Birthday day: " + this.birthday_day);
         System.out.println("Birthday month: " + this.birthday_month);
         System.out.println("Birthday year: " + this.birthday_year);
         System.out.println("\nBirthday date: " + birthdate);
         System.out.println("Age: " + this.age);
+
+        System.out.println("\nHeight(cm): " + this.heihgt_m);
+        System.out.println("Weight(kg): " + this.weight_kg);
     }
 
     //Add to Data Base
