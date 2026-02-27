@@ -33,20 +33,55 @@ public class menu {
                     throw new IllegalArgumentException("The Input is invalid your choice can't be less than 1 or higher than 10");
 
                 } switch (MenuChoiceNum) {
+                    //Call methods from AddPatient.java if case equals menu number x
                         case 1:
-                            AddPatient.ShowAddHelloMSG();
-                            add.AddBasicInformation(scanner);
-                            add.SetAge(scanner);
+                            AddPatient.HeaderMSG();
+
+                            //Loop through Methods to collect errors
+                            //And collect valid options
+
+                            while (true) {
+                                try {
+                                    add.AddBasicInformation(scanner);
+                                    break;
+
+                                } catch (IllegalArgumentException invalidInput) {
+                                    System.out.println("\nThere is an error of the patient generation");
+                                    System.out.println("The error is: " + invalidInput.getMessage() + "\n");
+                                }
+                            }
+
+                            while (true) {
+                                try {
+                                    add.CollectDateValues(scanner);
+                                    break;
+                                } catch (IllegalArgumentException invalidInput) {
+                                    System.out.println("\nThere is an error of the patient generation");
+                                    System.out.println("The error is: " + invalidInput.getMessage() + "\n");
+                                }
+                            }
+
+                            while (true) {
+                                try {
+                                    add.generateBirthDay(scanner);
+                                    break;
+                                } catch (IllegalArgumentException invalidInput) {
+                                    System.out.println("\nThere is an error of the patient generation");
+                                    System.out.println("The error is: " + invalidInput.getMessage() + "\n");
+                                }
+                            }
+
+
                             add.DisplayPatient();
                             break;
                         
                         default:
                             break;
                     }
-
-            } catch(Exception error) {
+            break;
+            } catch(IllegalArgumentException error) {
                 System.out.println("There is an error in your menu choice");
-                System.out.println("The error is" + error);
+                System.out.println("The error is" + error.getMessage());
             }
         }
     }
