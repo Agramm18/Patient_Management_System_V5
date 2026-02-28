@@ -37,7 +37,7 @@ public class AddPatient {
     //Hello MSG
     public static void HeaderMSG() {
         System.out.println("\n==================================================");
-        System.out.println("====You can now Add your patient to the System====");
+        System.out.println("=== You can now Add your patient to the System ===");
         System.out.println("==================================================\n");
     }
 
@@ -186,8 +186,8 @@ public class AddPatient {
         System.out.println("\nBirthday date: " + birthdate);
         System.out.println("Age: " + this.age);
 
-        System.out.println("\nHeight(cm): " + this.heihgt_m);
-        System.out.println("Weight(kg): " + this.weight_kg);
+        System.out.println("\nHeight: " + this.heihgt_m + " m");
+        System.out.println("Weight: " + this.weight_kg + " kg\n");
     }
 
     //Add to Data Base
